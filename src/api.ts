@@ -7,6 +7,17 @@ export * from "./dom/dom-parser.ts";
 export * from "./dom/elements/html-template-element.ts";
 export { disableCodeGeneration as denoDomDisableQuerySelectorCodeGeneration } from "./dom/selectors/selectors.ts";
 
+
+// custom elements
+export * from "./dom/elements/html-element.ts"
+export * from "./dom/elements/svg-element.ts"
+export * from "./dom/elements/math-ml-element.ts"
+
+export * from "./dom/html-elements/html-form-element.ts"
+export * from "./dom/html-elements/html-video-element.ts"
+
+export * from "./dom/mutation-observer.ts"
+
 // Re-export private constructors without constructor signature
 import {
   CharacterData as ConstructibleCharacterData,

@@ -9,6 +9,7 @@ import {
   insertBeforeAfter,
 } from "./utils.ts";
 import UtilTypes from "./utils-types.ts";
+import { NamespaceURI } from "./document.ts";
 
 export interface DOMTokenList {
   [index: number]: string;
@@ -514,7 +515,8 @@ export class Element extends Node {
   );
 
   constructor(
-    public tagName: string,
+    public  tagName: string,
+    public readonly namespaceURI: NamespaceURI,
     parentNode: Node | null,
     attributes: [string, string][],
     key: typeof CTOR_KEY,
@@ -550,7 +552,7 @@ export class Element extends Node {
     for (const attribute of this.getAttributeNames()) {
       attributes.push([attribute, this.getAttribute(attribute)!]);
     }
-    return new Element(this.nodeName, null, attributes, CTOR_KEY);
+    return new Element(this.nodeName, this.namespaceURI, null, attributes, CTOR_KEY);
   }
 
   get childElementCount(): number {

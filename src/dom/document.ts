@@ -7,6 +7,12 @@ import { HTMLTemplateElement } from "./elements/html-template-element.ts";
 import { getSelectorEngine, SelectorApi } from "./selectors/selectors.ts";
 import { getElementsByClassName } from "./utils.ts";
 import UtilTypes from "./utils-types.ts";
+import { HTMLElement } from "./elements/html-element.ts";
+import { CustomElementRegistry } from "./custom-element-registry.ts";
+import { HTMLElementByTag, HTMLElementTagNameMap, HTMLTag, MathMLElementByTag, MathMLTag, SVGElementByTag, SVGTag } from "./types/tags.ts";
+import { SVGElement } from "./elements/svg-element.ts";
+import { MathMLElement } from "./elements/math-ml-element.ts";
+
 
 export class DOMImplementation {
   constructor(key: typeof CTOR_KEY) {
@@ -27,13 +33,13 @@ export class DOMImplementation {
     const docType = new DocumentType("html", "", "", CTOR_KEY);
     doc.appendChild(docType);
 
-    const html = new Element("html", doc, [], CTOR_KEY);
+    const html = new HTMLElement("html", doc, [], CTOR_KEY);
     html._setOwnerDocument(doc);
 
-    const head = new Element("head", html, [], CTOR_KEY);
-    const body = new Element("body", html, [], CTOR_KEY);
+    const head = new HTMLElement("head", html, [], CTOR_KEY);
+    const body = new HTMLElement("body", html, [], CTOR_KEY);
 
-    const title = new Element("title", head, [], CTOR_KEY);
+    const title = new HTMLElement("title", head, [], CTOR_KEY);
     const titleText = new Text(titleStr);
     title.appendChild(titleText);
 
@@ -209,10 +215,10 @@ export class Document extends Node {
     return child;
   }
 
-  createElement(tagName: string, options?: ElementCreationOptions): Element {
-    tagName = tagName.toUpperCase();
+  createElement<T extends HTMLTag>(tagName: T, options?: ElementCreationOptions): HTMLElementByTag<T> {
+    const tagNameUpperCase = tagName.toUpperCase() as HTMLTag;
 
-    switch (tagName) {
+    switch (tagNameUpperCase) {
       case "TEMPLATE": {
         const frag = new DocumentFragment();
         const elm = new HTMLTemplateElement(
@@ -226,12 +232,31 @@ export class Document extends Node {
       }
 
       default: {
-        const elm = new Element(tagName, null, [], CTOR_KEY);
+        const type = CustomElementRegistry.getConstructor(tagNameUpperCase) ?? HTMLElement;
+        const elm = new type(tagNameUpperCase, null, [], CTOR_KEY);
         elm._setOwnerDocument(this);
         return elm;
       }
     }
   }
+
+  createElementNS<T extends HTMLTag>(
+    namespace: "http://www.w3.org/1999/xhtml",
+    qualifiedName: T,
+    options?: ElementCreationOptions,
+  ): HTMLElementByTag<T>
+
+  createElementNS<T extends SVGTag>(
+    namespace: "http://www.w3.org/2000/svg",
+    qualifiedName: T,
+    options?: ElementCreationOptions,
+  ): SVGElementByTag<T>
+
+  createElementNS<T extends MathMLTag>(
+    namespace: "http://www.w3.org/1998/Math/MathML",
+    qualifiedName: T,
+    options?: ElementCreationOptions,
+  ): MathMLElementByTag<T>
 
   createElementNS(
     namespace: NamespaceURI,
@@ -239,8 +264,20 @@ export class Document extends Node {
     options?: ElementCreationOptions,
   ): Element {
     if (namespace === "http://www.w3.org/1999/xhtml") {
-      return this.createElement(qualifiedName, options);
-    } else {
+      return this.createElement(qualifiedName as HTMLTag, options);
+    }
+    else if (namespace == "http://www.w3.org/2000/svg") {
+      const elm = new SVGElement(qualifiedName as SVGTag, null, [], CTOR_KEY);
+      elm._setOwnerDocument(this);
+      return elm;
+    }
+    else if (namespace == "http://www.w3.org/1998/Math/MathML") {
+      const elm = new MathMLElement(qualifiedName as MathMLTag, null, [], CTOR_KEY);
+      elm._setOwnerDocument(this);
+      return elm;
+    }
+
+    else {
       throw new Error(
         `createElementNS: "${namespace}" namespace unimplemented`,
       ); // TODO

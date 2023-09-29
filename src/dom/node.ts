@@ -61,7 +61,7 @@ export class Node extends EventTarget {
   public parentNode: Node | null = null;
   public parentElement: Element | null;
   #childNodesMutator: NodeListMutator;
-  #ownerDocument: Document | null = null;
+  _ownerDocument: Document | null = null;
   private _ancestors = new Set<Node>();
 
   // Instance constants defined after Node
@@ -125,7 +125,7 @@ export class Node extends EventTarget {
             this.parentElement = null;
           }
 
-          this._setOwnerDocument(newParent.#ownerDocument);
+          this._setOwnerDocument(newParent._ownerDocument);
         }
 
         // Add parent chain to ancestors
@@ -151,8 +151,8 @@ export class Node extends EventTarget {
   }
 
   _setOwnerDocument(document: Document | null) {
-    if (this.#ownerDocument !== document) {
-      this.#ownerDocument = document;
+    if (this._ownerDocument !== document) {
+      this._ownerDocument = document;
 
       for (const child of this.childNodes) {
         child._setOwnerDocument(document);
@@ -165,7 +165,7 @@ export class Node extends EventTarget {
   }
 
   get ownerDocument() {
-    return this.#ownerDocument;
+    return this._ownerDocument;
   }
 
   get nodeValue(): string | null {
@@ -632,9 +632,9 @@ export class Text extends CharacterData {
     return new Text(this.textContent);
   }
 
-  get textContent(): string {
-    return <string> this.nodeValue;
-  }
+  // get textContent(): string {
+  //   return <string> this.nodeValue;
+  // }
 }
 
 export class Comment extends CharacterData {
@@ -654,7 +654,7 @@ export class Comment extends CharacterData {
     return new Comment(this.textContent);
   }
 
-  get textContent(): string {
-    return <string> this.nodeValue;
-  }
+  // get textContent(): string {
+  //   return <string> this.nodeValue;
+  // }
 }
