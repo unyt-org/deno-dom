@@ -209,13 +209,13 @@ const setAttrValueSym = Symbol();
 export class Attr extends Node {
   #namedNodeMap: NamedNodeMap | null = null;
   #name = "";
-  #value = "";
+  #value:string|AttributeDef = "";
   #ownerElement: Element | null = null;
 
   constructor(
     map: NamedNodeMap | null,
     name: string,
-    value: string,
+    value: string|AttributeDef,
     key: typeof CTOR_KEY,
   ) {
     if (key !== CTOR_KEY) {
@@ -237,7 +237,7 @@ export class Attr extends Node {
     }
   }
 
-  [setAttrValueSym](value: string) {
+  [setAttrValueSym](value: string|AttributeDef) {
     this.#value = value;
   }
 
@@ -280,16 +280,17 @@ export class Attr extends Node {
   }
 
   get value(): string {
-    return this.#value;
+    return typeof this.#value == "string" ? this.#value : this.#value.get();
   }
 
   set value(value: any) {
-    this.#value = String(value);
+    if (typeof this.#value == "string") this.#value = String(value);
+    else this.#value.set(String(value))
 
     if (this.#namedNodeMap) {
       this.#namedNodeMap[setNamedNodeMapValueSym](
         this.#name,
-        this.#value,
+        this.value,
         true,
       );
     }
@@ -321,7 +322,7 @@ const removeNamedNodeMapAttrSym = Symbol();
 export class NamedNodeMap {
   static #indexedAttrAccess = function (
     this: NamedNodeMap,
-    map: Record<string, string | undefined>,
+    map: Record<string, string | AttributeDef | undefined>,
     index: number,
   ): Attr | undefined {
     if (index + 1 > this.length) {
@@ -349,7 +350,7 @@ export class NamedNodeMap {
   }
 
   #attrNodeCache: Record<string, Attr | undefined> = {};
-  #map: Record<string, string | undefined> = {};
+  #map: Record<string, string | AttributeDef | undefined> = {};
   #length = 0;
   #capacity = 0;
   #ownerElement: Element | null = null;
@@ -361,7 +362,7 @@ export class NamedNodeMap {
       attrNode = this.#attrNodeCache[safeAttrName] = new Attr(
         this,
         attribute,
-        this.#map[safeAttrName] as string,
+        this.#map[safeAttrName] as string | AttributeDef,
         CTOR_KEY,
       );
       attrNode[setNamedNodeMapOwnerElementSym](this.#ownerElement);
@@ -384,10 +385,11 @@ export class NamedNodeMap {
 
   [getNamedNodeMapValueSym](attribute: string): string | undefined {
     const safeAttrName = "a" + attribute;
-    return this.#map[safeAttrName];
+    const value = this.#map[safeAttrName];
+    return typeof value == "string" ? value : value?.get()
   }
 
-  [setNamedNodeMapValueSym](attribute: string, value: string, bubble = false) {
+  [setNamedNodeMapValueSym](attribute: string, value: string|AttributeDef, bubble = false) {
     const safeAttrName = "a" + attribute;
     if (this.#map[safeAttrName] === undefined) {
       this.#length++;
@@ -406,6 +408,7 @@ export class NamedNodeMap {
     this.#map[safeAttrName] = value;
 
     if (bubble) {
+      if (typeof value == "object") throw new Error("Cannot bubble AttributeDef")
       this.#onAttrNodeChange(attribute, value);
     }
   }
@@ -486,6 +489,8 @@ export class NamedNodeMap {
     throw new DOMException("Node was not found");
   }
 }
+
+type AttributeDef = {get:()=>string, set:(value:string)=>void};
 
 export class Element extends Node {
   localName: string;
@@ -647,6 +652,16 @@ export class Element extends Node {
     }
   }
 
+  /**
+   * Use to define a attribute with a getter and setter instead of a static value
+   * @param rawName 
+   * @param def 
+   */
+  protected _setAttributeDef(rawName: string, def: AttributeDef) {
+    const name = String(rawName?.toLowerCase());
+    this.attributes[setNamedNodeMapValueSym](name, def);
+  }
+
   removeAttribute(rawName: string) {
     const name = String(rawName?.toLowerCase());
     this.attributes[removeNamedNodeMapAttrSym](name);
@@ -668,6 +683,8 @@ export class Element extends Node {
       String(name?.toLowerCase()),
     ) !== undefined;
   }
+
+
 
   replaceWith(...nodes: (Node | string)[]) {
     this._replaceWith(...nodes);

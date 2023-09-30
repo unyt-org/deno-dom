@@ -6,6 +6,8 @@ import { HTMLTag } from "../types/tags.ts";
 
 export class HTMLElement extends Element {
 
+	style = CSSStyleDeclaration.create()
+
 	constructor(
 		tagName: HTMLTag,
 		parentNode: Node | null,
@@ -19,9 +21,19 @@ export class HTMLElement extends Element {
 			attributes,
 			key,
 		);
+
+		// set initial style
+		if (this.hasAttribute("style")) {
+			this.style.cssText = this.getAttribute("style")!
+		}
+
+		// bind style to style attribute
+		this._setAttributeDef("style", {
+			get: () => this.style.cssText,
+			set: (value: string) => 4//this.style.cssText = value
+		})
 	}
 
-	style = CSSStyleDeclaration.create()
 
 	dataset = {}
 }

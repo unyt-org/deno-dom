@@ -5,6 +5,7 @@ import { DocumentType } from "./dom/document.ts";
 import { DocumentFragment } from "./dom/document-fragment.ts";
 import { HTMLTemplateElement } from "./dom/elements/html-template-element.ts";
 import { Element } from "./dom/element.ts";
+import { HTMLElement } from "./dom/elements/html-element.ts";
 
 export function nodesFromString(html: string): Node {
   const parsed = JSON.parse(parse(html));
@@ -45,7 +46,7 @@ function nodeFromArray(data: any, parentNode: Node | null): Node {
     );
   }
 
-  const elm = new Element(data[1], parentNode, data[2], CTOR_KEY);
+  const elm = new HTMLElement(data[1], parentNode, data[2], CTOR_KEY);
   const childNodes = elm._getChildNodesMutator();
   let childNode: Node;
 

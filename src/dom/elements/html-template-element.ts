@@ -29,6 +29,7 @@ export class HTMLTemplateElement extends Element {
   ) {
     super(
       "TEMPLATE",
+      "http://www.w3.org/1999/xhtml",
       parentNode,
       attributes,
       key,

@@ -2,9 +2,9 @@ import { HTMLElement } from "./elements/html-element.ts";
 
 type CustomElementOptions = {extends: string};
 
-export class CustomElementRegistry {
+export class CustomElementRegistry<Tag extends string = string> {
 
-	static #registries  = new Set<CustomElementRegistry>()
+	static #registries = new Set<CustomElementRegistry>()
 	static getConstructor(name: string) {
 		name = name.toUpperCase();
 		for (const registry of this.#registries) {
@@ -17,15 +17,15 @@ export class CustomElementRegistry {
 		CustomElementRegistry.#registries.add(this)
 	}
 
-	#elements = new Map<string, {constructor: typeof HTMLElement, options?: CustomElementOptions}>
+	#elements = new Map<Tag, {constructor: typeof HTMLElement, options?: CustomElementOptions}>
 
-	define(name: string, constructor: typeof HTMLElement, options?: CustomElementOptions) {
-		name = name.toUpperCase();
+	define(name: Tag, constructor: typeof HTMLElement, options?: CustomElementOptions) {
+		name = name.toUpperCase() as Tag;
 		this.#elements.set(name, {constructor, options})
 	}
 
-	get(name: string) {
-		name = name.toUpperCase();
+	get(name: Tag) {
+		name = name.toUpperCase() as Tag;
 		return this.#elements.get(name)?.constructor;
 	}
 

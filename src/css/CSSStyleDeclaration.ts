@@ -1,5 +1,7 @@
 export class CSSStyleDeclaration extends Array /*implements CSSStyleDeclaration*/ {
     
+    [name:string]: string|Function|number|null
+
     public static toCamelCase(property:string) {
         // ignore variables
         if (property.startsWith("--")) return property;
@@ -15,14 +17,14 @@ export class CSSStyleDeclaration extends Array /*implements CSSStyleDeclaration*
         throw new Error("PlaceholderCSSStyleDeclaration Method not implemented.");
     }
     getPropertyValue(property: string): string {
-        return this[CSSStyleDeclaration.toCamelCase(property)]
+        return this[CSSStyleDeclaration.toCamelCase(property)] as string
     }
     removeProperty(property: string): string {
         const name = CSSStyleDeclaration.toCamelCase(property);
-        const val = this[name];
+        const val = this[name] as string;
         delete this[name];
 
-        let index = this.indexOf(property);
+        const index = this.indexOf(property);
         if (index != -1) this.splice(index, 1);
 
         return val;
@@ -47,6 +49,14 @@ export class CSSStyleDeclaration extends Array /*implements CSSStyleDeclaration*
         return css.join(" ");
     }
 
+    set cssText(css: string) {
+        this.length = 0;
+        for (const entry of css.split(";")) {
+            const [prop, value] = entry.split(":").map(s=>s.trim())
+            if (prop) this.setProperty(prop, value)
+        }
+    }
+
     private constructor(){
         super();
     }
@@ -58,7 +68,7 @@ export class CSSStyleDeclaration extends Array /*implements CSSStyleDeclaration*
             set(target, p, newValue, receiver) {
 
                 // number indices or 'length' property
-                if (p == "length" || typeof p == "symbol" || !Number.isNaN(Number(p))) target[p] = newValue; 
+                if (p == "length" || p == "cssText" || typeof p == "symbol" || !Number.isNaN(Number(p))) target[p] = newValue; 
 
                 // css properties
                 else {
@@ -71,7 +81,7 @@ export class CSSStyleDeclaration extends Array /*implements CSSStyleDeclaration*
             },
             get(target, p, receiver) {
                 // number indices or 'length' property
-                if (p == "length" || typeof p == "symbol" || !Number.isNaN(Number(p))) return target[p]; 
+                if (p == "length" || p == "cssText" || typeof p == "symbol" || !Number.isNaN(Number(p))) return target[p]; 
                 else {
                     return target[CSSStyleDeclaration.toCamelCase(<string>p)];
                 }
