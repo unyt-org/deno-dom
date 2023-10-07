@@ -12,6 +12,12 @@ export class CustomElementRegistry<Tag extends string = string> {
 			if (constructor) return constructor;
 		}
 	}
+	static getTagName(constructor: typeof HTMLElement) {
+		for (const registry of this.#registries) {
+			const name = registry.getName(constructor);
+			if (name) return constructor;
+		}
+	}
 
 	constructor() {
 		CustomElementRegistry.#registries.add(this)

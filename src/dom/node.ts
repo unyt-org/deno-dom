@@ -563,11 +563,11 @@ export class CharacterData extends Node {
     this.#nodeValue = data;
   }
 
-  get nodeValue(): string {
+  override get nodeValue(): string {
     return this.#nodeValue;
   }
 
-  set nodeValue(value: any) {
+  override set nodeValue(value: any) {
     this.#nodeValue = String(value ?? "");
   }
 
@@ -579,11 +579,11 @@ export class CharacterData extends Node {
     this.nodeValue = value;
   }
 
-  get textContent(): string {
+  override get textContent(): string {
     return this.#nodeValue;
   }
 
-  set textContent(value: any) {
+  override set textContent(value: any) {
     this.nodeValue = value;
   }
 
@@ -628,7 +628,7 @@ export class Text extends CharacterData {
     );
   }
 
-  _shallowClone(): Node {
+  override _shallowClone(): Node {
     return new Text(this.textContent);
   }
 
@@ -650,7 +650,7 @@ export class Comment extends CharacterData {
     );
   }
 
-  _shallowClone(): Node {
+  override _shallowClone(): Node {
     return new Comment(this.textContent);
   }
 

@@ -1,4 +1,5 @@
 import { CTOR_KEY } from "../../constructor-lock.ts";
+import { DOMStringMap } from "../dom-string-map.ts";
 import { Element } from "../element.ts";
 import { Node } from "../node.ts";
 import { SVGTag } from "../types/tags.ts";
@@ -19,5 +20,7 @@ export class SVGElement extends Element {
 			key,
 		);
 	}
+
+	dataset = DOMStringMap.create(this)
 
 }

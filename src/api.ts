@@ -4,7 +4,7 @@ export * from "./dom/element.ts";
 export * from "./dom/document.ts";
 export * from "./dom/document-fragment.ts";
 export * from "./dom/dom-parser.ts";
-export * from "./dom/elements/html-template-element.ts";
+export * from "./dom/html-elements/html-template-element.ts";
 export { disableCodeGeneration as denoDomDisableQuerySelectorCodeGeneration } from "./dom/selectors/selectors.ts";
 
 
@@ -12,9 +12,15 @@ export { disableCodeGeneration as denoDomDisableQuerySelectorCodeGeneration } fr
 export * from "./dom/elements/html-element.ts"
 export * from "./dom/elements/svg-element.ts"
 export * from "./dom/elements/math-ml-element.ts"
+export * from "./dom/document-fragment.ts"
 
 export * from "./dom/html-elements/html-form-element.ts"
 export * from "./dom/html-elements/html-video-element.ts"
+export * from "./dom/html-elements/html-input-element.ts"
+export * from "./dom/html-elements/html-heading-element.ts"
+export * from "./dom/html-elements/html-image-element.ts"
+export * from "./dom/html-elements/html-button-element.ts"
+export * from "./dom/html-elements/html-div-element.ts"
 
 export * from "./dom/mutation-observer.ts"
 

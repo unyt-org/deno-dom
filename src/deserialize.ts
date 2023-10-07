@@ -3,7 +3,7 @@ import { CTOR_KEY } from "./constructor-lock.ts";
 import { Comment, Node, NodeType, Text } from "./dom/node.ts";
 import { DocumentType } from "./dom/document.ts";
 import { DocumentFragment } from "./dom/document-fragment.ts";
-import { HTMLTemplateElement } from "./dom/elements/html-template-element.ts";
+import { HTMLTemplateElement } from "./dom/html-elements/html-template-element.ts";
 import { Element } from "./dom/element.ts";
 import { HTMLElement } from "./dom/elements/html-element.ts";
 

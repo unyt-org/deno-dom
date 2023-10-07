@@ -68,7 +68,7 @@ export class CSSStyleDeclaration extends Array /*implements CSSStyleDeclaration*
             set(target, p, newValue, receiver) {
 
                 // number indices or 'length' property
-                if (p == "length" || p == "cssText" || typeof p == "symbol" || !Number.isNaN(Number(p))) target[p] = newValue; 
+                if (p == "length" || p == "cssText" || typeof p == "symbol" || !Number.isNaN(Number(p))) (target as any)[p] = newValue; 
 
                 // css properties
                 else {
@@ -81,7 +81,7 @@ export class CSSStyleDeclaration extends Array /*implements CSSStyleDeclaration*
             },
             get(target, p, receiver) {
                 // number indices or 'length' property
-                if (p == "length" || p == "cssText" || typeof p == "symbol" || !Number.isNaN(Number(p))) return target[p]; 
+                if (p == "length" || p == "cssText" || typeof p == "symbol" || !Number.isNaN(Number(p))) return (target as any)[p]; 
                 else {
                     return target[CSSStyleDeclaration.toCamelCase(<string>p)];
                 }

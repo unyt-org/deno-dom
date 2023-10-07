@@ -10,6 +10,7 @@ import {
 } from "./utils.ts";
 import UtilTypes from "./utils-types.ts";
 import { NamespaceURI } from "./document.ts";
+import { ShadowRoot } from "./elements/shadow-root.ts";
 
 export interface DOMTokenList {
   [index: number]: string;
@@ -519,11 +520,14 @@ export class Element extends Node {
     CTOR_KEY,
   );
 
+  #shadowRoot: ShadowRoot|null = null;
+  get shadowRoot() {return this.#shadowRoot}
+
   constructor(
     public  tagName: string,
     public readonly namespaceURI: NamespaceURI,
     parentNode: Node | null,
-    attributes: [string, string][],
+    attributes: [string, string][] = [],
     key: typeof CTOR_KEY,
   ) {
     super(
@@ -550,7 +554,7 @@ export class Element extends Node {
     this.localName = tagName.toLowerCase();
   }
 
-  _shallowClone(): Node {
+  override _shallowClone(): Node {
     // FIXME: This attribute copying needs to also be fixed in other
     // elements that override _shallowClone like <template>
     const attributes: [string, string][] = [];
@@ -855,6 +859,43 @@ export class Element extends Node {
     // TODO: Use namespace
     return this.getElementsByTagName(localName);
   }
+
+  static shadowRootAllowed = [
+    "article",
+    "aside",
+    "blockquote",
+    "body",
+    "div",
+    "footer",
+    "h1",
+    "h2",
+    "h3",
+    "h4",
+    "h5",
+    "h6",
+    "header",
+    "main",
+    "nav",
+    "p",
+    "section",
+    "span"
+  ]
+
+
+  attachShadow(options: attachShadowOptions) {
+    // TODO check if allowed (also allow custom components)
+    // if (!Element.shadowRootAllowed.includes(this.tagName.toLowerCase())) throw new DOMException("Failed to execute 'attachShadow' on 'Element': This element does not support attachShadow")
+    if (this.#shadowRoot) throw new DOMException("Shadow root cannot be created on a host which already hosts a shadow tree.");
+    this.#shadowRoot = new ShadowRoot();
+    return this.#shadowRoot;
+  }
+
+}
+
+type attachShadowOptions = {
+  mode: "open"|"closed",
+  delegatesFocus?: boolean,
+  slotAssignment?: "named"|"manual"
 }
 
 UtilTypes.Element = Element;

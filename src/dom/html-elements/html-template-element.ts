@@ -1,12 +1,12 @@
 import { Node } from "../node.ts";
-import { Element } from "../element.ts";
 import { Document } from "../document.ts";
 import { DocumentFragment } from "../document-fragment.ts";
 import { getElementAttributesString, getOuterOrInnerHtml } from "../utils.ts";
 import { fragmentNodesFromString } from "../../deserialize.ts";
 import { CTOR_KEY } from "../../constructor-lock.ts";
+import { HTMLElement } from "../elements/html-element.ts";
 
-export class HTMLTemplateElement extends Element {
+export class HTMLTemplateElement extends HTMLElement {
   /**
    * This blocks access to the .#contents property when the
    * super() constructor is running which invokes (our
@@ -29,7 +29,6 @@ export class HTMLTemplateElement extends Element {
   ) {
     super(
       "TEMPLATE",
-      "http://www.w3.org/1999/xhtml",
       parentNode,
       attributes,
       key,
@@ -72,12 +71,9 @@ export class HTMLTemplateElement extends Element {
     return newNode;
   }
 
-  get innerHTML(): string {
-    return getOuterOrInnerHtml(this, false);
-  }
 
   // Replace children in the `.content`
-  set innerHTML(html: string) {
+  override set innerHTML(html: string) {
     const content = this.content;
 
     // Remove all children
@@ -100,7 +96,8 @@ export class HTMLTemplateElement extends Element {
     }
   }
 
-  get outerHTML(): string {
+
+  override get outerHTML(): string {
     return `<template${
       getElementAttributesString(this)
     }>${this.innerHTML}</template>`;
