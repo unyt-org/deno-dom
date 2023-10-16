@@ -1,9 +1,10 @@
 import { CTOR_KEY } from "../../constructor-lock.ts";
 import { CSSStyleDeclaration } from "../../css/CSSStyleDeclaration.ts";
-import { DOMStringMap } from "uix/uix-dom/dom/deno-dom/src/dom/dom-string-map.ts";
+import { DOMStringMap } from "../dom-string-map.ts";
 import { Element } from "../element.ts";
 import { Node } from "../node.ts";
 import { HTMLTag } from "../types/tags.ts";
+import { CustomElementRegistry } from "../custom-element-registry.ts";
 
 export class HTMLElement extends Element {
 
@@ -23,7 +24,7 @@ export class HTMLElement extends Element {
 		key?: typeof CTOR_KEY
 	) {
 		super(
-			tagName ?? "-placeholder-",
+			tagName ?? "error-no-tagname-found",
 			"http://www.w3.org/1999/xhtml",
 			parentNode ?? null,
 			attributes,
@@ -35,6 +36,8 @@ export class HTMLElement extends Element {
 			if (this.constructor === HTMLElement)
 				throw new TypeError("Illegal constructor.!");
 		}
+
+		if (!tagName) this.tagName = this.nodeName = CustomElementRegistry.getTagName(this.constructor as typeof HTMLElement)!
 
 		// set initial style
 		if (this.hasAttribute("style")) {

@@ -15,7 +15,7 @@ export class CustomElementRegistry<Tag extends string = string> {
 	static getTagName(constructor: typeof HTMLElement) {
 		for (const registry of this.#registries) {
 			const name = registry.getName(constructor);
-			if (name) return constructor;
+			if (name) return name;
 		}
 	}
 

@@ -9,7 +9,6 @@ export { disableCodeGeneration as denoDomDisableQuerySelectorCodeGeneration } fr
 
 
 // custom elements
-export * from "./dom/elements/html-element.ts"
 export * from "./dom/elements/svg-element.ts"
 export * from "./dom/elements/math-ml-element.ts"
 export * from "./dom/document-fragment.ts"
@@ -31,6 +30,7 @@ import {
 } from "./dom/node.ts";
 
 import { HTMLDocument as ConstructibleHTMLDocument } from "./dom/document.ts";
+import { HTMLElement as ConstructibleHTMLElement } from "./dom/elements/html-element.ts"
 
 import {
   Attr as ConstructibleAttr,
@@ -68,6 +68,15 @@ export const Element:
   >
   & Function = ConstructibleElement;
 export type Element = ConstructibleElement;
+
+
+export const HTMLElement:
+  & Pick<
+    typeof ConstructibleHTMLElement,
+    keyof typeof ConstructibleHTMLElement
+  >
+  & Function & {new(): ConstructibleHTMLElement} = ConstructibleHTMLElement;
+export type HTMLElement = ConstructibleHTMLElement;
 
 export const Attr:
   & Pick<
