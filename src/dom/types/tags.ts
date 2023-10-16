@@ -24,7 +24,7 @@ export interface HTMLElementTagNameMap {
     "bdo": HTMLElement;
     // "blockquote": HTMLQuoteElement;
     "body": HTMLElement // HTMLBodyElement;
-    // "br": HTMLBRElement;
+    "br": HTMLElement // HTMLBRElement;
     "button": HTMLButtonElement;
     // "canvas": HTMLCanvasElement;
     // "caption": HTMLTableCaptionElement;
@@ -85,7 +85,7 @@ export interface HTMLElementTagNameMap {
     // "output": HTMLOutputElement;
     "p": HTMLElement // HTMLParagraphElement;
     // "picture": HTMLPictureElement;
-    // "pre": HTMLPreElement;
+    "pre": HTMLElement // HTMLPreElement;
     "progress": HTMLElement // HTMLProgressElement;
     // "q": HTMLQuoteElement;
     "rp": HTMLElement;
@@ -97,10 +97,10 @@ export interface HTMLElementTagNameMap {
     "search": HTMLElement;
     "section": HTMLElement;
     "select": HTMLElement // HTMLSelectElement;
-    // "slot": HTMLSlotElement;
+    "slot": HTMLElement // HTMLSlotElement;
     "small": HTMLElement;
     "source": HTMLElement // HTMLSourceElement;
-    // "span": HTMLSpanElement;
+    "span": HTMLElement // HTMLSpanElement;
     "strong": HTMLElement;
     // "style": HTMLStyleElement;
     "sub": HTMLElement;
