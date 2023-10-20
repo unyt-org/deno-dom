@@ -9,6 +9,8 @@ import { HTMLVideoElement } from "../html-elements/html-video-element.ts";
 import { HTMLButtonElement } from "../html-elements/html-button-element.ts";
 import { HTMLHeadingElement } from "../html-elements/html-heading-element.ts";
 import { HTMLInputElement } from "../html-elements/html-input-element.ts";
+import { HTMLDialogElement } from "../html-elements/html-dialog-element.ts";
+import { HTMLOptionElement } from "../html-elements/html-option-element.ts";
 
 export interface HTMLElementTagNameMap {
     "a": HTMLElement // HTMLAnchorElement;
@@ -38,7 +40,7 @@ export interface HTMLElementTagNameMap {
     "del": HTMLElement // HTMLModElement;
     "details": HTMLElement // HTMLDetailsElement;
     "dfn": HTMLElement;
-    "dialog": HTMLElement // HTMLDialogElement;
+    "dialog": HTMLDialogElement;
     "div": HTMLDivElement;
     "dl": HTMLElement // HTMLDListElement;
     "dt": HTMLElement;
@@ -81,7 +83,7 @@ export interface HTMLElementTagNameMap {
     "object": HTMLElement // HTMLObjectElement;
     "ol": HTMLElement // HTMLOListElement;
     "optgroup": HTMLElement // HTMLOptGroupElement;
-    "option": HTMLElement // HTMLOptionElement;
+    "option": HTMLOptionElement
     "output": HTMLElement // HTMLOutputElement;
     "p": HTMLElement // HTMLParagraphElement;
     "picture": HTMLElement // HTMLPictureElement;
