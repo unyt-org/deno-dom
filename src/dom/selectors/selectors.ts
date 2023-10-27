@@ -1,7 +1,7 @@
 import { DOM as NWAPI } from "./nwsapi-types.ts";
 import { DOM as Sizzle } from "./sizzle-types.ts";
 import type { Element } from "../element.ts";
-import type { Document } from "../document.ts";
+import { Document } from "../document.ts";
 
 export type Selector = (doc: Document) => {
   first(
@@ -39,6 +39,13 @@ export function getSelectorEngine(): Selector {
   } else {
     return Sizzle;
   }
+}
+
+let defaultNWAPI: ReturnType<Selector>|undefined;
+
+export function getDefaultNWAPI() {
+  if (!defaultNWAPI) defaultNWAPI = getSelectorEngine()(new Document());
+  return defaultNWAPI;
 }
 
 /**

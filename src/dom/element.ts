@@ -757,22 +757,14 @@ export class Element extends Node {
   }
 
   querySelector(selectors: string): Element | null {
-    if (!this.ownerDocument) {
-      throw new Error("Element must have an owner document");
-    }
-
-    return this.ownerDocument!._nwapi.first(selectors, this);
+    return this.ownerDocument._nwapi.first(selectors, this);
   }
 
   querySelectorAll(selectors: string): NodeList {
-    if (!this.ownerDocument) {
-      throw new Error("Element must have an owner document");
-    }
-
     const nodeList = new NodeList();
     const mutator = nodeList[nodeListMutatorSym]();
 
-    for (const match of this.ownerDocument!._nwapi.select(selectors, this)) {
+    for (const match of this.ownerDocument._nwapi.select(selectors, this)) {
       mutator.push(match);
     }
 
@@ -780,11 +772,11 @@ export class Element extends Node {
   }
 
   matches(selectorString: string): boolean {
-    return this.ownerDocument!._nwapi.match(selectorString, this);
+    return this.ownerDocument._nwapi.match(selectorString, this);
   }
 
   closest(selectorString: string): Element | null {
-    const { match } = this.ownerDocument!._nwapi; // See note below
+    const { match } = this.ownerDocument._nwapi; // See note below
     // deno-lint-ignore no-this-alias
     let el: Element | null = this;
     do {

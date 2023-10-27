@@ -1,3 +1,5 @@
+const updateHandler = Symbol("updateHandler");
+
 export class CSSStyleDeclaration extends Array /*implements CSSStyleDeclaration*/ {
     
     [name:string]: string|Function|number|null
@@ -75,6 +77,7 @@ export class CSSStyleDeclaration extends Array /*implements CSSStyleDeclaration*
                     (<any>target)[CSSStyleDeclaration.toCamelCase(p)] = newValue;
                     const kebabProp = CSSStyleDeclaration.toKebabCase(<string>p);
                     if (!target.includes(kebabProp)) target.push(kebabProp);
+                    dec._triggerUpdate();
                 }
 
                 return true;
@@ -87,5 +90,15 @@ export class CSSStyleDeclaration extends Array /*implements CSSStyleDeclaration*
                 }
             },
         })
+    }
+
+    private [updateHandler] = new Set<()=>void>();
+    
+    public onUpdate(handler:()=>void) {
+        this[updateHandler].add(handler)
+    }
+
+    protected _triggerUpdate() {
+        for (const handler of this[updateHandler]) handler()
     }
 }

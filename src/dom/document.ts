@@ -121,8 +121,8 @@ export type NamespaceURI =
   | "http://www.w3.org/1998/Math/MathML";
 
 export class Document extends Node {
-  public head: Element = <Element> <unknown> null;
-  public body: Element = <Element> <unknown> null;
+  public head: HTMLElement = <HTMLElement> <unknown> null;
+  public body: HTMLElement = <HTMLElement> <unknown> null;
   public implementation: DOMImplementation;
 
   #lockState = false;

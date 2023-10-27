@@ -6,8 +6,9 @@ import {
   moveDocumentFragmentChildren,
 } from "./utils.ts";
 import type { Element } from "./element.ts";
-import type { Document } from "./document.ts";
+import { Document } from "./document.ts";
 import type { DocumentFragment } from "./document-fragment.ts";
+import type { MutationObserver, MutationObserverInit } from "./mutation-observer.ts";
 
 export enum NodeType {
   ELEMENT_NODE = 1,
@@ -55,14 +56,18 @@ export const nodesAndTextNodes = (
   });
 };
 
+export const REGISTERED_OBSERVERS = Symbol("REGISTERED_OBSERVERS");
+
 export class Node extends EventTarget {
   #nodeValue: string | null = null;
   public childNodes: NodeList;
   public parentNode: Node | null = null;
   public parentElement: Element | null;
   #childNodesMutator: NodeListMutator;
-  _ownerDocument: Document | null = null;
+  _ownerDocument: Document|null = null
   private _ancestors = new Set<Node>();
+
+  [REGISTERED_OBSERVERS]: Set<[MutationObserver, MutationObserverInit, MutationObserver?]> = new Set()
 
   // Instance constants defined after Node
   // class body below to avoid clutter
@@ -164,8 +169,10 @@ export class Node extends EventTarget {
     return child._ancestors.has(this) || child === this;
   }
 
-  get ownerDocument() {
-    return this._ownerDocument;
+  get ownerDocument():Document {
+    const doc = this._ownerDocument ?? Node.defaultDocument
+    if (!doc) throw new Error("No default document set")
+    return doc;
   }
 
   get nodeValue(): string | null {
@@ -510,6 +517,16 @@ export class Node extends EventTarget {
       return (this as any).host.getRootNode(opts);
     }
     return this;
+  }
+
+  static defaultDocument:Document|null = null
+
+  /**
+   * Set the default document that is set as the ownerDocument for all nodes
+   * without an explicitly defined owner document
+   */
+  static setDefaultDocument(document: Document) {
+    this.defaultDocument = document;
   }
 }
 

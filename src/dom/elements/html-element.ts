@@ -44,11 +44,22 @@ export class HTMLElement extends Element {
 			this.style.cssText = this.getAttribute("style")!
 		}
 
-		// bind style to style attribute
-		this._setAttributeDef("style", {
-			get: () => this.style.cssText,
-			set: (value: string) => 4//this.style.cssText = value
-		})
+		// bind style to style attribute	
+		this.style.onUpdate(()=>this.#handleStyleUpdate())
+		this.#handleStyleUpdate()
+	}
+
+	#handleStyleUpdate() {
+		// todo don't allow user overwrite of style attribute
+		if (this.style.cssText && !this.hasAttribute("style")) {
+			this._setAttributeDef("style", {
+				get: () => this.style.cssText,
+				set: (value: string) => {
+					this.style.cssText = value;
+					if (!value) this.removeAttribute("style");
+				},
+			})
+		}
 	}
 
 	dataset = DOMStringMap.create(this)

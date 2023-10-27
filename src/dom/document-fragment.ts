@@ -84,11 +84,7 @@ export class DocumentFragment extends Node {
   }
 
   querySelector(selectors: string): Element | null {
-    if (!this.ownerDocument) {
-      throw new Error("DocumentFragment must have an owner document");
-    }
-
-    return this.ownerDocument!._nwapi.first(selectors, this as any as Element);
+    return this.ownerDocument._nwapi.first(selectors, this as any as Element);
   }
 
   querySelectorAll(selectors: string): NodeList {
@@ -99,7 +95,7 @@ export class DocumentFragment extends Node {
     const nodeList = new NodeList();
     const mutator = nodeList[nodeListMutatorSym]();
     mutator.push(
-      ...this.ownerDocument!._nwapi.select(selectors, this as any as Element),
+      ...this.ownerDocument._nwapi.select(selectors, this as any as Element),
     );
 
     return nodeList;
