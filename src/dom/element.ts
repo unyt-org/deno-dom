@@ -11,6 +11,7 @@ import {
 import UtilTypes from "./utils-types.ts";
 import { NamespaceURI } from "./document.ts";
 import { ShadowRoot } from "./elements/shadow-root.ts";
+import { QUEUE_MUTATION_RECORD } from "./mutation-observer.ts";
 
 export interface DOMTokenList {
   [index: number]: string;
@@ -356,6 +357,22 @@ export class NamedNodeMap {
   #capacity = 0;
   #ownerElement: Element | null = null;
 
+  #handleAttrChangeListeners(attr: string, oldValue?: string|null) {
+    if (!this.#ownerElement) return;
+
+    oldValue ??= undefined;
+
+    MutationObserver[QUEUE_MUTATION_RECORD]({
+      type: "attributes",
+      target: this.#ownerElement,
+      attributeName: attr,
+      attributeNamespace: undefined,
+      oldValue,
+      addedNodes: [],
+      removedNodes: []
+    })
+  }
+
   [getNamedNodeMapAttrNodeSym](attribute: string): Attr {
     const safeAttrName = "a" + attribute;
     let attrNode = this.#attrNodeCache[safeAttrName];
@@ -391,6 +408,7 @@ export class NamedNodeMap {
   }
 
   [setNamedNodeMapValueSym](attribute: string, value: string|AttributeDef, bubble = false) {
+    const oldValue = this.#ownerElement?.getAttribute(attribute);
     const safeAttrName = "a" + attribute;
     if (this.#map[safeAttrName] === undefined) {
       this.#length++;
@@ -407,6 +425,7 @@ export class NamedNodeMap {
     }
 
     this.#map[safeAttrName] = value;
+    this.#handleAttrChangeListeners(attribute, oldValue);
 
     if (bubble) {
       if (typeof value == "object") throw new Error("Cannot bubble AttributeDef")
@@ -421,6 +440,7 @@ export class NamedNodeMap {
   [removeNamedNodeMapAttrSym](attribute: string) {
     const safeAttrName = "a" + attribute;
     if (this.#map[safeAttrName] !== undefined) {
+      const oldValue = this.#ownerElement?.getAttribute(attribute);
       this.#length--;
       this.#map[safeAttrName] = undefined;
       this.#onAttrNodeChange(attribute, null);
@@ -430,6 +450,7 @@ export class NamedNodeMap {
         attrNode[setNamedNodeMapOwnerElementSym](null);
         this.#attrNodeCache[safeAttrName] = undefined;
       }
+      this.#handleAttrChangeListeners(attribute, oldValue);
     }
   }
 
