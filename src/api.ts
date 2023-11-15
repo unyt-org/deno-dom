@@ -22,6 +22,7 @@ export * from "./dom/html-elements/html-button-element.ts"
 export * from "./dom/html-elements/html-div-element.ts"
 export * from "./dom/html-elements/html-dialog-element.ts"
 export * from "./dom/html-elements/html-option-element.ts"
+export * from "./dom/html-elements/html-select-element.ts"
 
 export * from "./dom/mutation-observer.ts"
 

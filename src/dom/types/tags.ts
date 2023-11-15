@@ -11,6 +11,7 @@ import { HTMLHeadingElement } from "../html-elements/html-heading-element.ts";
 import { HTMLInputElement } from "../html-elements/html-input-element.ts";
 import { HTMLDialogElement } from "../html-elements/html-dialog-element.ts";
 import { HTMLOptionElement } from "../html-elements/html-option-element.ts";
+import { HTMLSelectElement } from "../html-elements/html-select-element.ts";
 
 export interface HTMLElementTagNameMap {
     "a": HTMLElement // HTMLAnchorElement;
@@ -98,7 +99,7 @@ export interface HTMLElementTagNameMap {
     "script": HTMLElement // HTMLScriptElement;
     "search": HTMLElement;
     "section": HTMLElement;
-    "select": HTMLElement // HTMLSelectElement;
+    "select": HTMLSelectElement;
     "slot": HTMLElement // HTMLSlotElement;
     "small": HTMLElement;
     "source": HTMLElement // HTMLSourceElement;
