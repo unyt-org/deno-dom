@@ -49,6 +49,16 @@ export class HTMLElement extends Element {
 		this.#handleStyleUpdate()
 	}
 
+	override _shallowClone(): HTMLElement {
+		// FIXME: This attribute copying needs to also be fixed in other
+		// elements that override _shallowClone like <template>
+		const attributes: [string, string][] = [];
+		for (const attribute of this.getAttributeNames()) {
+		  attributes.push([attribute, this.getAttribute(attribute)!]);
+		}
+		return new (this.constructor as typeof HTMLElement)(this.tagName as HTMLTag, null, attributes, CTOR_KEY);
+	}
+
 	#handleStyleUpdate() {
 		// todo don't allow user overwrite of style attribute
 		if (this.style.cssText && !this.hasAttribute("style")) {
