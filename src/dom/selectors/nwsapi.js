@@ -246,7 +246,7 @@ function Factory(global, Export) {
         Snapshot.doc = doc;
         Snapshot.root = root;
       }
-      return (Snapshot.from = context);
+      return context; // @benstre refactored (before: (Snapshot.from = context))
     },
 
   // convert single codepoint to UTF-16 encoding
@@ -1504,10 +1504,15 @@ function Factory(global, Export) {
         return Config.VERBOSITY ? undefined : false;
       }
 
+      // TODO: use weak refs?
       // save/reuse factory and closure collection
-      selectResolvers[selectors] = collect(expressions, context, callback);
-
-      nodes = selectResolvers[selectors].results;
+      // --- original
+      // selectResolvers[selectors] = collect(expressions, context, callback);
+      // nodes = selectResolvers[selectors].results;
+      // --- edit @benstre
+      const __res__ = collect(expressions, context, callback);
+      nodes = __res__.results;
+      // --- edit end
 
       return typeof callback == 'function' ?
         concatCall(nodes, callback) : nodes;
@@ -1786,6 +1791,7 @@ function Factory(global, Export) {
   };
 
   initialize(doc);
+  globalThis.selectResolvers = selectResolvers;
 
   return Dom;
 }
