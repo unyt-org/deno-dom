@@ -573,7 +573,7 @@ function Factory(global, Export) {
   initialize =
     function(doc) {
       setIdentifierSyntax();
-      lastContext = switchContext(doc, true);
+      lastContext = null// switchContext(doc, true);
     },
 
   // build validation regexps used by the engine
@@ -1471,7 +1471,7 @@ function Factory(global, Export) {
         emit('\'\'' + qsInvalid);
         return Config.VERBOSITY ? undefined : none;
       } else if (lastContext !== context) {
-        lastContext = switchContext(context);
+        lastContext = null //switchContext(context);
       }
 
       // input NULL or UNDEFINED
