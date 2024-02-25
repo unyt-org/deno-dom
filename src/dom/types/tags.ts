@@ -1,17 +1,17 @@
 import type { HTMLElement } from "../elements/html-element.ts";
-import { SVGElement } from "../elements/svg-element.ts";
+import type { SVGElement } from "../elements/svg-element.ts";
 import type { HTMLFormElement } from "../html-elements/html-form-element.ts";
-import { MathMLElement } from "../elements/math-ml-element.ts";
-import { HTMLTemplateElement } from "../html-elements/html-template-element.ts";
-import { HTMLDivElement } from "../html-elements/html-div-element.ts";
-import { HTMLImageElement } from "../html-elements/html-image-element.ts";
-import { HTMLVideoElement } from "../html-elements/html-video-element.ts";
-import { HTMLButtonElement } from "../html-elements/html-button-element.ts";
-import { HTMLHeadingElement } from "../html-elements/html-heading-element.ts";
-import { HTMLInputElement } from "../html-elements/html-input-element.ts";
-import { HTMLDialogElement } from "../html-elements/html-dialog-element.ts";
-import { HTMLOptionElement } from "../html-elements/html-option-element.ts";
-import { HTMLSelectElement } from "../html-elements/html-select-element.ts";
+import type { MathMLElement } from "../elements/math-ml-element.ts";
+import type { HTMLTemplateElement } from "../html-elements/html-template-element.ts";
+import type { HTMLDivElement } from "../html-elements/html-div-element.ts";
+import type { HTMLImageElement } from "../html-elements/html-image-element.ts";
+import type { HTMLVideoElement } from "../html-elements/html-video-element.ts";
+import type { HTMLButtonElement } from "../html-elements/html-button-element.ts";
+import type { HTMLHeadingElement } from "../html-elements/html-heading-element.ts";
+import type { HTMLInputElement } from "../html-elements/html-input-element.ts";
+import type { HTMLDialogElement } from "../html-elements/html-dialog-element.ts";
+import type { HTMLOptionElement } from "../html-elements/html-option-element.ts";
+import type { HTMLSelectElement } from "../html-elements/html-select-element.ts";
 
 export interface HTMLElementTagNameMap {
     "a": HTMLElement // HTMLAnchorElement;
