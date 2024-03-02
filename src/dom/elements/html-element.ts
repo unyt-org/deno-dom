@@ -37,7 +37,7 @@ export class HTMLElement extends Element {
 				throw new TypeError("Illegal constructor.!");
 		}
 
-		if (!tagName) this.tagName = this.nodeName = CustomElementRegistry.getTagName(this.constructor as typeof HTMLElement)!
+		if (!tagName) this.localName = this.tagName = this.nodeName = CustomElementRegistry.getTagName(this.constructor as typeof HTMLElement)!
 
 		// set initial style
 		if (this.hasAttribute("style")) {
