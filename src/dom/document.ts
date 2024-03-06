@@ -9,7 +9,7 @@ import { getElementsByClassName } from "./utils.ts";
 import UtilTypes from "./utils-types.ts";
 import { HTMLElement } from "./elements/html-element.ts";
 import { CustomElementRegistry } from "./custom-element-registry.ts";
-import { HTMLElementByTag, HTMLElementTagNameMap, HTMLTag, MathMLElementByTag, MathMLTag, SVGElementByTag, SVGTag } from "./types/tags.ts";
+import { HTMLElementByTag, HTMLTag, MathMLElementByTag, MathMLTag, SVGElementByTag, SVGTag } from "./types/tags.ts";
 import { SVGElement } from "./elements/svg-element.ts";
 import { MathMLElement } from "./elements/math-ml-element.ts";
 
