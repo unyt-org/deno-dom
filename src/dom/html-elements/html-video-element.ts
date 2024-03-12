@@ -1,5 +1,5 @@
-import { HTMLElement } from "../elements/html-element.ts";
+import { HTMLMediaElement } from "./html-media-element.ts";
 
-export class HTMLVideoElement extends HTMLElement {
+export class HTMLVideoElement extends HTMLMediaElement {
 
 }

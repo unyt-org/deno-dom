@@ -14,6 +14,7 @@ export * from "./dom/elements/math-ml-element.ts"
 export * from "./dom/document-fragment.ts"
 
 export * from "./dom/html-elements/html-form-element.ts"
+export * from "./dom/html-elements/html-media-element.ts"
 export * from "./dom/html-elements/html-video-element.ts"
 export * from "./dom/html-elements/html-input-element.ts"
 export * from "./dom/html-elements/html-heading-element.ts"
