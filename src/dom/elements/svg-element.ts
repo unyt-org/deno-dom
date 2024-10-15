@@ -45,6 +45,16 @@ export class SVGElement extends Element {
 		}
 	}
 
+	override _shallowClone(): SVGElement {
+		// FIXME: This attribute copying needs to also be fixed in other
+		// elements that override _shallowClone like <template>
+		const attributes: [string, string][] = [];
+		for (const attribute of this.getAttributeNames()) {
+		  attributes.push([attribute, this.getAttribute(attribute)!]);
+		}
+		return new (this.constructor as typeof SVGElement)(this.tagName as SVGTag, null, attributes, CTOR_KEY);
+	}
+
 	dataset = DOMStringMap.create(this)
 
 }
